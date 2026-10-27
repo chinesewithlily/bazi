@@ -40,8 +40,10 @@ button,input,select{font:inherit;color:inherit}
 [lang="ja"]{font-family:var(--font-ja)}
 
 /* header */
-.top{text-align:center;display:grid;justify-items:center;gap:6px;padding-top:8px}
+.top{position:relative;text-align:center;display:grid;justify-items:center;gap:6px;padding-top:8px}
 .logo{width:50px;height:50px}
+.switchpage{position:absolute;top:0;right:0;display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;border:1px solid var(--gold);background:var(--surface);color:var(--gold);font-size:13px;letter-spacing:.06em;text-decoration:none;box-shadow:0 4px 12px -8px var(--shadow)}
+.switchpage:hover{background:var(--chip)}
 .langsw{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);margin-bottom:6px}
 .langsw button{border:0;background:none;padding:5px 13px;border-radius:999px;font-size:13px;letter-spacing:.04em;color:var(--ink);opacity:.8;cursor:pointer}
 .langsw button[aria-pressed="true"]{background:var(--gold);color:var(--on-rose);opacity:1}
@@ -207,6 +209,7 @@ summary{cursor:pointer;font-weight:600;letter-spacing:.08em}
 <body>
 <main class="wrap">
   <header class="top">
+    <a class="switchpage" id="toOther" href="ziwei/" data-i="toOther"></a>
     <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
       <defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a46f2a"/><stop offset=".3" stop-color="#e2c27c"/><stop offset=".52" stop-color="#ad7d38"/><stop offset=".75" stop-color="#ecd294"/><stop offset="1" stop-color="#9c6a28"/></linearGradient></defs>
       <g fill="url(#gm)" fill-opacity=".22" stroke="url(#gm)" stroke-width="2"><rect x="14" y="34" width="14" height="46" rx="4"/><rect x="33" y="28" width="14" height="52" rx="4"/><rect x="53" y="28" width="14" height="52" rx="4"/><rect x="72" y="34" width="14" height="46" rx="4"/></g>
@@ -345,7 +348,7 @@ zh:{eyebrow:'八字學中文 · BaZi & Chinese · <span lang="ja">日本語</spa
  noTime:'不知道出生時間',noTimeS:'只排年、月、日三柱；大運起運時間會有誤差。',
  solar:'用真太陽時校正',solarS:'依出生地經度與均時差調整時間，時辰交界附近才會有差別。',
  zi:'23:00 起算隔天（子時換日）',ziS:'關掉＝早晚子時：23:00–24:00 日柱仍算當天。',
- go:'排盤',saved:'已存的命盤',noSaved:'還沒有存命盤。',errDate:'請輸入正確的出生日期（1901–2099）。',
+ go:'排盤',toOther:'紫微排盤 →',saved:'已存的命盤',noSaved:'還沒有存命盤。',errDate:'請輸入正確的出生日期（1901–2099）。',
  disclaimer:'僅供娛樂與學習中文參考，不構成任何建議。資料只存在你的裝置。',
  qian:'乾造',kun:'坤造',lunar:'農曆',zodiac:'生肖',adjSolar:'真太陽時',adjDst:'已扣除夏令時間 1 小時',
  rowSS:'十神',rowGan:'天干',rowZhi:'地支',rowHide:'藏干',rowNy:'納音',rowDs:'星運',rowKong:'空亡',
@@ -362,7 +365,7 @@ en:{eyebrow:'BaZi & Chinese · 八字學中文 · <span lang="ja">日本語</spa
  noTime:'I don’t know my birth time',noTimeS:'Shows the year, month and day pillars only; the luck-pillar start date will be approximate.',
  solar:'Use true solar time',solarS:'Adjusts for the longitude of your birthplace and the equation of time; it only matters near the boundary of a two-hour period.',
  zi:'Day changes at 23:00 (Zi hour)',ziS:'Off = early/late Zi hour: 23:00–24:00 still counts as the same day.',
- go:'Show my chart',saved:'Saved charts',noSaved:'No saved charts yet.',errDate:'Please enter a valid date of birth (1901–2099).',
+ go:'Show my chart',toOther:'Zi Wei chart →',saved:'Saved charts',noSaved:'No saved charts yet.',errDate:'Please enter a valid date of birth (1901–2099).',
  disclaimer:'For entertainment and learning Chinese only; not advice of any kind. Your data stays on your device.',
  qian:'Male chart 乾造',kun:'Female chart 坤造',lunar:'Lunar date',zodiac:'Zodiac',adjSolar:'True solar time',adjDst:'1 hour of summer time removed',
  rowSS:'Ten God',rowGan:'Stem',rowZhi:'Branch',rowHide:'Hidden',rowNy:'Nayin',rowDs:'Life stage',rowKong:'Void',
@@ -379,7 +382,7 @@ ja:{eyebrow:'八字学中文 · BaZi &amp; Chinese · 日本語',title:'四柱�
  noTime:'生まれた時刻がわからない',noTimeS:'年・月・日の三柱のみ表示。大運の開始時期は目安になります。',
  solar:'真太陽時で補正する',solarS:'出生地の経度と均時差で時刻を調整します。時辰の境目付近でのみ差が出ます。',
  zi:'23:00 から翌日とする（子の刻で日替わり）',ziS:'オフ＝早子・夜子：23:00〜24:00 は当日の日柱のまま。',
- go:'命式を出す',saved:'保存した命式',noSaved:'保存した命式はまだありません。',errDate:'正しい生年月日（1901〜2099年）を入力してください。',
+ go:'命式を出す',toOther:'紫微斗数 →',saved:'保存した命式',noSaved:'保存した命式はまだありません。',errDate:'正しい生年月日（1901〜2099年）を入力してください。',
  disclaimer:'娯楽と中国語学習のための参考です。いかなる助言でもありません。データはお使いの端末にのみ保存されます。',
  qian:'男命 乾造',kun:'女命 坤造',lunar:'旧暦',zodiac:'干支',adjSolar:'真太陽時',adjDst:'サマータイム 1 時間を差し引き済み',
  rowSS:'通変星',rowGan:'天干',rowZhi:'地支',rowHide:'蔵干',rowNy:'納音',rowDs:'十二運',rowKong:'空亡',
@@ -393,7 +396,7 @@ ja:{eyebrow:'八字学中文 · BaZi &amp; Chinese · 日本語',title:'四柱�
 var JQ_JA={'立春':'立春','驚蟄':'啓蟄','清明':'清明','立夏':'立夏','芒種':'芒種','小暑':'小暑','立秋':'立秋','白露':'白露','寒露':'寒露','立冬':'立冬','大雪':'大雪','小寒':'小寒'};
 var JQ_EN={'立春':'Start of Spring','驚蟄':'Awakening of Insects','清明':'Clear and Bright','立夏':'Start of Summer','芒種':'Grain in Ear','小暑':'Minor Heat','立秋':'Start of Autumn','白露':'White Dew','寒露':'Cold Dew','立冬':'Start of Winter','大雪':'Major Snow','小寒':'Minor Cold'};
 
-var lang='zh';
+var lang='zh', OTHER='ziwei/';
 function t(k,o){var s=(T[lang]&&T[lang][k]!=null)?T[lang][k]:T.zh[k];if(o)for(var x in o)s=s.split('{'+x+'}').join(o[x]);return s}
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 
@@ -404,7 +407,7 @@ function applyLang(){
   var sel=$('#pl'),cur=sel.value||store('bazi-place')||'taipei';
   sel.innerHTML=PLACES.map(function(p){var n=lang==='en'?p[2]:lang==='ja'?p[3]:p[1];return '<option value="'+p[0]+'">'+esc(n)+(lang!=='zh'&&lang!=='ja'?'':' · '+esc(p[2]))+'</option>'}).join('');
   sel.value=PL[cur]?cur:'taipei';
-  renderHist(); if(last) render(last);
+  renderHist(); if(last){render(last);setOther(last.inp)}
 }
 
 /* ---------- time handling ---------- */
@@ -553,15 +556,16 @@ function syncSw(){var nt=$('#noTime').checked;$('#bt').disabled=nt;$('#solar').d
 function valid(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;var y=+d.slice(0,4);return y>=1901&&y<=2099}
 function run(inp,scroll){
   if(!valid(inp.d)){var e=$('#err');e.textContent=t('errDate');e.hidden=false;return}
-  $('#err').hidden=true;store('bazi-place',inp.p);selDy=null;
+  $('#err').hidden=true;store('bazi-place',inp.p);store('cw-last',JSON.stringify(inp));setOther(inp);selDy=null;
   render(compute(inp));
   if(scroll)$('#out').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function toast(s){var el=$('#toast');el.textContent=s;el.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove('on')},1600)}
 function copyText(s){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).then(function(){toast(t('copied'))},function(){fallback(s)})}else fallback(s)}
 function fallback(s){var ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(t('copied'))}catch(e){}ta.remove()}
-function shareUrl(i){var q=new URLSearchParams({d:i.d,g:i.g?'m':'f',p:i.p,lang:lang});if(!i.nt)q.set('t',i.t);else q.set('nt','1');if(i.s)q.set('s','1');if(!i.z)q.set('z','0');if(i.n)q.set('n',i.n);
-  return location.origin+location.pathname+'?'+q.toString()}
+function qs(i){var q=new URLSearchParams({d:i.d,g:i.g?'m':'f',p:i.p,lang:lang});if(!i.nt)q.set('t',i.t);else q.set('nt','1');if(i.s)q.set('s','1');if(!i.z)q.set('z','0');if(i.n)q.set('n',i.n);return q.toString()}
+function shareUrl(i){return location.origin+location.pathname+'?'+qs(i)}
+function setOther(i){var a=$('#toOther');a.href=OTHER+(i?'?'+qs(i):'')}
 function resultText(R){var lines=[(R.inp.n?R.inp.n+' ':'')+(R.inp.g===1?'乾造':'坤造')+'｜'+R.inp.d+(R.inp.nt?'':' '+R.inp.t)+'｜'+R.place[1],
   '八字：'+R.bazi+(R.inp.nt?'（時辰不詳）':''),
   '日主：'+R.dayGan+'（'+(YANG[R.dayGan]?'陽':'陰')+ELK[EL_OF[R.dayGan]].zh+'）',
@@ -593,6 +597,7 @@ if(/^(zh|en|ja)$/.test(ql||'')){lang=ql;store('bazi-lang',lang)}
 else if(/^(zh|en|ja)$/.test(saved||''))lang=saved;
 else{var nl=(navigator.language||'zh').toLowerCase();lang=nl.indexOf('ja')===0?'ja':nl.indexOf('zh')===0?'zh':'en'}
 applyLang();
+if(!q.get('d')){try{var lp=JSON.parse(store('cw-last')||'null');if(lp&&lp.d){fillForm(lp)}}catch(e){}}
 if(q.get('d')){var i0={n:q.get('n')||'',g:q.get('g')==='f'?0:1,d:q.get('d'),t:q.get('t')||'12:00',p:q.get('p')||'taipei',nt:q.get('nt')==='1'?1:0,s:q.get('s')==='1'?1:0,z:q.get('z')==='0'?0:1};fillForm(i0);run(i0,false)}
 syncSw();
 })();
@@ -602,8 +607,8 @@ syncSw();
 <script>(function(){try{var q=location.search;if(/[?&]notrack=1/.test(q))localStorage.setItem('cw-notrack','1');if(/[?&]notrack=0/.test(q))localStorage.removeItem('cw-notrack');if(localStorage.getItem('cw-notrack')==='1'){console.log('analytics off on this device');return}}catch(e){}if(location.hostname.indexOf('github.io')<0)return;var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon','{"token": "a9294b7012bb4e4bbf4b67f23979b202"}');document.body.appendChild(s)})();</script>
 <!-- End Cloudflare Web Analytics -->
 <!-- Auto-update: GitHub Pages lets browsers cache pages ~10 min; check for a newer build and refresh once -->
-<script>(function(){var B='BUILD:20261027202543';try{if(location.protocol.indexOf('http')!==0)return;
-fetch(location.href,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/BUILD:20261027202543(\d+)/);
-if(m&&('BUILD:20261027202543'+m[1])!==B){var k='autoupd-'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.reload()}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){var B='BUILD:20261027221414';try{if(location.protocol.indexOf('http')!==0)return;
+fetch(location.href,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/BUILD:(\d+)/);
+if(m&&('BUILD:'+m[1])!==B){var k='autoupd-'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.reload()}}).catch(function(){})}catch(e){}})();</script>
 </body>
 </html>
