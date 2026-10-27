@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>八字學中文 排盤</title>
+<meta name="description" content="八字排盤：四柱、十神、藏干、五行、大運流年，附拼音、英文、日文。BaZi Four Pillars chart with pinyin, English and Japanese.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+TC:wght@500;700&display=swap">
+<style>
+/* Layout: one centred column — birth details → four pillars → five elements → day master → luck pillars → saved charts */
+:root{
+  --bg:#fbefe9; --surface:#fff8f4; --ink:#5a3a31; --muted:#8c6a5f; --gold:#a8783a; --gold-soft:#e6cc92;
+  --rose:#c4705f; --on-rose:#fffaf6; --chip:#f6dfd7; --mist:#dbe8f0; --line:rgba(168,120,58,.32);
+  --glow1:rgba(255,255,255,.85); --glow2:rgba(205,224,236,.75); --shadow:rgba(120,70,55,.18);
+  --rg1:#c08470; --rg2:#e9b8a6; --rgglow:rgba(214,150,128,.45); --glint:rgba(255,248,240,.95);
+  --tile:linear-gradient(180deg,#fdf8f1,#f5e9de);
+  --wood:#3f8a5c; --fire:#cf4f3c; --earth:#8b6a4a; --metal:#b0841c; --water:#3f78ad;
+  --font-ui:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  --font-ja:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+  --card-zh:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --card-en:"Cormorant Garamond","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#22171d; --surface:#2e2028; --ink:#f4e4dc; --muted:#c4a79c; --gold:#e2bf7c; --gold-soft:#8a6a3a;
+  --rose:#e39b8b; --on-rose:#2a1a20; --chip:#3d2a31; --mist:#2b3944; --line:rgba(226,191,124,.28);
+  --glow1:rgba(227,155,139,.13); --glow2:rgba(120,155,185,.12); --shadow:rgba(0,0,0,.45);
+  --rg1:#d99a88; --rg2:#f6d0c0; --rgglow:rgba(240,170,150,.4); --glint:rgba(255,252,248,1);
+  --tile:linear-gradient(180deg,#3a2932,#30222a);
+  --wood:#86c79a; --fire:#f08a76; --earth:#d2ad86; --metal:#e8c35e; --water:#8dbbe6; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(70% 45% at 10% 0%,var(--glow1),transparent 70%),radial-gradient(55% 40% at 100% 18%,var(--glow2),transparent 70%);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.65;min-height:100%}
+[hidden]{display:none!important}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(28px + env(safe-area-inset-top,0px)) calc(72px + env(safe-area-inset-bottom,0px));display:grid;gap:26px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+[lang="ja"]{font-family:var(--font-ja)}
+
+/* header */
+.top{text-align:center;display:grid;justify-items:center;gap:6px;padding-top:8px}
+.logo{width:50px;height:50px}
+.langsw{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);margin-bottom:6px}
+.langsw button{border:0;background:none;padding:5px 13px;border-radius:999px;font-size:13px;letter-spacing:.04em;color:var(--ink);opacity:.8;cursor:pointer}
+.langsw button[aria-pressed="true"]{background:var(--gold);color:var(--on-rose);opacity:1}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h1{margin:0;font-weight:700;font-size:clamp(28px,6vw,40px);letter-spacing:.08em;line-height:1.3}
+.slogan{display:grid;justify-items:center;gap:4px;margin:4px 0 6px}
+.slogan-en{margin:0;display:flex;align-items:center;gap:10px;white-space:nowrap;font-weight:600;font-size:clamp(18px,4.8vw,24px);letter-spacing:.02em;line-height:1.3}
+.sl-text{background:linear-gradient(100deg,var(--gold) 10%,var(--rose) 55%,var(--gold) 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sl-line{position:relative;overflow:hidden;flex:none;width:clamp(16px,5.2vw,44px);height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--rg1) 40%,var(--rg2));box-shadow:0 0 6px var(--rgglow);animation:slglow 3.6s ease-in-out infinite}
+.sl-line.r{background:linear-gradient(270deg,transparent,var(--rg1) 40%,var(--rg2))}
+.sl-line::after{content:"";position:absolute;top:-2px;bottom:-2px;left:0;width:60%;background:linear-gradient(90deg,transparent,var(--glint) 50%,transparent);transform:translateX(-130%);animation:slglint 3.6s ease-in-out infinite}
+.sl-line.r::after{animation-name:slglintR}
+@keyframes slglow{0%,100%{box-shadow:0 0 4px var(--rgglow)}50%{box-shadow:0 0 10px var(--rgglow),0 0 2px var(--glint)}}
+@keyframes slglint{0%{transform:translateX(-130%)}55%,100%{transform:translateX(260%)}}
+@keyframes slglintR{0%{transform:translateX(260%)}55%,100%{transform:translateX(-130%)}}
+.slogan-tr{margin:0;font-size:14px;letter-spacing:.1em;color:var(--muted);text-align:center}
+.sl-py{display:block;font-size:12px;letter-spacing:.02em;color:var(--rose)}
+.sub{margin:0;max-width:34em;color:var(--muted);text-wrap:balance}
+
+/* form */
+.setup{display:grid;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px -18px var(--shadow)}
+.field{display:grid;gap:6px;min-width:0}
+.label{font-size:12px;letter-spacing:.12em;color:var(--muted);margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inp{width:100%;min-width:0;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:8px 12px;font-size:16px}
+select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%);background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+.inp:disabled{opacity:.45}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:7px 16px;display:flex;align-items:baseline;gap:6px;line-height:1.25}
+.chips label small{font-size:12px;color:var(--muted)}
+.chips input:checked+label{background:var(--chip);border-color:var(--gold)}
+.chips input:focus-visible+label{outline:2px solid var(--rose);outline-offset:2px}
+.switches{display:grid;gap:12px}
+.switch{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14px;line-height:1.45}
+.switch input{flex:none;width:40px;height:22px;margin:0;appearance:none;border-radius:999px;background:var(--chip);border:1px solid var(--line);position:relative;cursor:pointer;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--gold);transition:transform .2s}
+.switch input:checked{background:var(--rose)}
+.switch input:checked::after{transform:translateX(18px);background:var(--on-rose)}
+.switch small{display:block;font-size:12px;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+.btn{border:0;border-radius:999px;padding:11px 26px;font-weight:500;letter-spacing:.12em;cursor:pointer;background:var(--rose);color:var(--on-rose);box-shadow:0 6px 16px -8px var(--shadow);transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;padding:9px 18px;letter-spacing:.06em;font-size:14px}
+.err{margin:0;color:var(--fire);font-size:14px;text-align:center}
+
+/* reading */
+.reading{display:grid;gap:24px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 16px;box-shadow:0 18px 40px -26px var(--shadow)}
+.r-head{text-align:center;display:grid;gap:2px}
+.r-head h2{margin:0;font-weight:700;font-size:clamp(20px,4.5vw,26px);letter-spacing:.06em}
+.r-head p{margin:0;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.r-head .adj{font-size:12px;color:var(--gold)}
+.sec{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:20px}
+.sec h3{margin:0;font-size:16px;font-weight:700;letter-spacing:.12em;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.sec h3 small{font-weight:400;font-size:13px;letter-spacing:.02em;color:var(--muted)}
+.hint{margin:0;font-size:13px;color:var(--muted)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:6px 6px;align-items:center}
+.pillars .rl{max-width:60px;font-size:11px;letter-spacing:.06em;color:var(--muted);text-align:right;padding-right:2px;line-height:1.25}
+.pillars .rl small{display:block;font-size:10px;letter-spacing:0;opacity:.85}
+.ph{text-align:center;font-size:13px;letter-spacing:.1em;color:var(--gold);line-height:1.25}
+.ph small{display:block;font-size:11px;letter-spacing:0;color:var(--muted)}
+.ph.me{color:var(--rose)}
+.ss{text-align:center;font-size:13px;line-height:1.2}
+.ss small{display:block;font-size:10px;color:var(--muted)}
+.ss.me{color:var(--rose);font-weight:700}
+.tile{height:100%;position:relative;padding:1.5px;border-radius:14px;background:linear-gradient(160deg,#a46f2a,#e6c784 28%,#b4843f 50%,#f0d89e 72%,#9c6a28);box-shadow:0 8px 18px -12px var(--shadow)}
+.tile-in{height:100%;align-content:center;border-radius:12.5px;background:var(--tile);display:grid;justify-items:center;padding:8px 2px 6px;gap:0}
+.tile .ch{font-family:var(--card-zh);font-weight:700;font-size:clamp(30px,8.5vw,46px);line-height:1.1}
+.tile .py{font-size:12px;color:var(--muted);letter-spacing:.02em}
+.tile .el{font-size:11px;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0 3px;text-align:center;line-height:1.3}
+html[lang=en-GB] .tile .el{font-size:10px}
+html[lang=en-GB] .tile .el::before{display:none}
+.tile .el::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.tile.me{background:conic-gradient(from 200deg,#f7c6d9,#c9e7f7,#d6f5d1,#fbedb5,#f5c3c0,#dccbf5,#f7c6d9);padding:2px}
+.tile.blank .tile-in{min-height:96px;place-items:center;color:var(--muted);font-size:22px}
+.e-wood{color:var(--wood)}.e-fire{color:var(--fire)}.e-earth{color:var(--earth)}.e-metal{color:var(--metal)}.e-water{color:var(--water)}
+.hide{display:grid;gap:2px;justify-items:center}
+.hide span{font-size:13px;line-height:1.25;text-align:center;white-space:nowrap}
+.hide span b{font-family:var(--card-zh);font-size:16px;margin-right:2px}
+.hide span small{font-size:10px;color:var(--muted)}
+.cell{text-align:center;font-size:13px;line-height:1.3}
+.cell small{display:block;font-size:10px;color:var(--muted)}
+
+/* five elements */
+.wx{display:grid;gap:8px}
+.wx-row{display:grid;grid-template-columns:88px 1fr 28px;align-items:center;gap:10px;font-size:14px}
+.wx-name b{font-family:var(--card-zh);font-size:18px;margin-right:4px}
+.wx-name small{font-size:11px;color:var(--muted)}
+html[lang=en-GB] .wx-name small{display:block;line-height:1.2}
+.bar{height:10px;border-radius:999px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:currentColor;opacity:.85;transition:width .5s}
+.wx-n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.note-box{margin:0;font-size:14px;background:var(--chip);border-radius:12px;padding:10px 12px}
+
+/* day master */
+.dm{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+.dm .tile .ch{font-size:52px}
+.dm-text{display:grid;gap:6px;min-width:0}
+.dm-text h4{margin:0;font-size:18px;letter-spacing:.06em}
+.dm-text p{margin:0}
+.dm-text .tr{color:var(--muted);font-size:14px}
+
+/* luck pillars */
+.yun-meta{margin:0;font-size:14px}
+.dayun{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.dy{flex:none;scroll-snap-align:start;border:1px solid var(--line);background:transparent;border-radius:14px;padding:8px 10px;min-width:74px;display:grid;justify-items:center;gap:0;cursor:pointer;line-height:1.25}
+.dy .age{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.dy .gz{font-family:var(--card-zh);font-size:24px;font-weight:700;letter-spacing:.04em;line-height:1.3}
+.dy .gz.pre{font-family:var(--font-ui);font-size:13px;font-weight:500;padding:6px 0;color:var(--muted)}
+.dy .sg{font-size:10px;color:var(--muted)}
+.dy .yr{font-size:11px;font-variant-numeric:tabular-nums}
+.dy[aria-pressed="true"]{background:var(--chip);border-color:var(--gold)}
+.dy.now{box-shadow:inset 0 0 0 1.5px var(--rose)}
+.ln{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.ln div{border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:6px 2px;text-align:center;line-height:1.25}
+.ln b{display:block;font-family:var(--card-zh);font-size:18px}
+.ln small{display:block;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ln div.now{border-color:var(--rose);background:var(--chip)}
+.tag-now{font-size:10px;color:var(--rose);letter-spacing:.06em}
+
+/* extras & glossary */
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.kv div{border:1px dashed var(--line);border-radius:12px;padding:8px 10px;display:grid;line-height:1.35}
+.kv span{font-size:12px;color:var(--muted)}
+.kv b{font-family:var(--card-zh);font-size:17px;font-weight:700}
+.kv small{font-size:11px;color:var(--muted)}
+details{border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600;letter-spacing:.08em}
+.gl{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.gl li{font-size:14px;line-height:1.5}
+.gl b{font-family:var(--card-zh);font-size:16px;margin-right:6px}
+.gl .py{color:var(--rose);font-size:12px;margin-right:6px}
+.gl small{display:block;color:var(--muted);font-size:13px}
+.r-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.note{margin:0;font-size:12px;color:var(--muted);text-align:center}
+
+/* saved */
+.history{display:grid;gap:10px}
+.history h2{margin:0;font-weight:500;font-size:16px;letter-spacing:.14em}
+.history ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.history li{display:flex;align-items:center;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:8px;font-size:14px}
+.history li button.open{flex:1;text-align:left;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline}
+.history li .gz{font-family:var(--card-zh);letter-spacing:.06em}
+.history li small{color:var(--muted);font-variant-numeric:tabular-nums}
+.history li .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px 8px}
+.empty{color:var(--muted);font-size:14px;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.on{opacity:1}
+
+@media (max-width:420px){
+  .grid2{grid-template-columns:1fr}
+  .pillars{gap:5px 4px}
+  .pillars .rl{font-size:10px}
+  .dm{grid-template-columns:80px 1fr;gap:12px}
+  .dm .tile .ch{font-size:44px}
+  .wx-row{grid-template-columns:76px 1fr 24px}
+}
+@media (prefers-reduced-motion:reduce){.sl-line,.sl-line::after{animation:none}.sl-line::after{opacity:0}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a46f2a"/><stop offset=".3" stop-color="#e2c27c"/><stop offset=".52" stop-color="#ad7d38"/><stop offset=".75" stop-color="#ecd294"/><stop offset="1" stop-color="#9c6a28"/></linearGradient></defs>
+      <g fill="url(#gm)" fill-opacity=".22" stroke="url(#gm)" stroke-width="2"><rect x="14" y="34" width="14" height="46" rx="4"/><rect x="33" y="28" width="14" height="52" rx="4"/><rect x="53" y="28" width="14" height="52" rx="4"/><rect x="72" y="34" width="14" height="46" rx="4"/></g>
+      <path d="M50 6Q50 15 59 15Q50 15 50 24Q50 15 41 15Q50 15 50 6Z" fill="url(#gm)"/><path d="M10 86H90" stroke="url(#gm)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="langsw" role="group" aria-label="Language / 語言 / 言語"><button type="button" data-lang="zh">中文</button><button type="button" data-lang="en">English</button><button type="button" data-lang="ja" lang="ja">日本語</button></div>
+    <p class="eyebrow" data-i="eyebrow"></p>
+    <h1 data-i="title"></h1>
+    <div class="slogan">
+      <p class="slogan-en"><span class="sl-line" aria-hidden="true"></span><span class="sl-text">Eight characters, one story.</span><span class="sl-line r" aria-hidden="true"></span></p>
+      <p class="slogan-tr" data-i="slogan"></p>
+    </div>
+    <p class="sub" data-i="sub"></p>
+  </header>
+
+  <form class="setup" id="form" novalidate>
+    <div class="field">
+      <label class="label" for="nm" data-i="name"></label>
+      <input class="inp" id="nm" maxlength="20" autocomplete="off">
+    </div>
+    <div class="field">
+      <p class="label" data-i="gender"></p>
+      <div class="chips" role="radiogroup">
+        <input type="radio" name="g" id="gM" value="1" checked><label for="gM" data-i="male"></label>
+        <input type="radio" name="g" id="gF" value="0"><label for="gF" data-i="female"></label>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label class="label" for="bd" data-i="date"></label><input class="inp" type="date" id="bd" min="1901-01-01" max="2099-12-31" value="1995-08-08" required></div>
+      <div class="field"><label class="label" for="bt" data-i="time"></label><input class="inp" type="time" id="bt" value="12:00"></div>
+    </div>
+    <div class="field">
+      <label class="label" for="pl" data-i="place"></label>
+      <select class="inp" id="pl"></select>
+    </div>
+    <div class="switches">
+      <label class="switch"><input type="checkbox" id="noTime"><span><span data-i="noTime"></span><small data-i="noTimeS"></small></span></label>
+      <label class="switch"><input type="checkbox" id="solar"><span><span data-i="solar"></span><small data-i="solarS"></small></span></label>
+      <label class="switch"><input type="checkbox" id="zi" checked><span><span data-i="zi"></span><small data-i="ziS"></small></span></label>
+    </div>
+    <p class="err" id="err" hidden></p>
+    <div class="row"><button class="btn" type="submit" data-i="go"></button></div>
+  </form>
+
+  <section class="reading" id="out" hidden aria-live="polite"></section>
+
+  <section class="history">
+    <h2 data-i="saved"></h2>
+    <ol id="hist"></ol>
+    <p class="empty" id="histEmpty" data-i="noSaved"></p>
+  </section>
+
+  <p class="note" data-i="disclaimer"></p>
+  <p class="note">Calendar engine: <a href="https://github.com/6tail/lunar-javascript" style="color:inherit">lunar-javascript</a> (MIT)</p>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="lunar.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+
+/* ---------- simplified → traditional for strings coming from the calendar library ---------- */
+var S2T={'伤':'傷','财':'財','杀':'殺','炉':'爐','剑':'劍','锋':'鋒','头':'頭','涧':'澗','蜡':'蠟','杨':'楊','雳':'靂','长':'長','驿':'驛','钗':'釵','钏':'釧','灯':'燈','带':'帶','临':'臨','养':'養','绝':'絕','腊':'臘','闰':'閏','惊':'驚','蛰':'蟄','谷':'穀','满':'滿','种':'種','处':'處','龙':'龍','马':'馬','鸡':'雞','猪':'豬','霹':'霹','泽':'澤','钟':'鐘','铁':'鐵','岁':'歲'};
+function tr(s){return String(s||'').replace(/[一-鿿]/g,function(c){return S2T[c]||c})}
+
+/* ---------- reference tables ---------- */
+var GAN='甲乙丙丁戊己庚辛壬癸'.split(''), ZHI='子丑寅卯辰巳午未申酉戌亥'.split('');
+var PY={'甲':'jiǎ','乙':'yǐ','丙':'bǐng','丁':'dīng','戊':'wù','己':'jǐ','庚':'gēng','辛':'xīn','壬':'rén','癸':'guǐ',
+ '子':'zǐ','丑':'chǒu','寅':'yín','卯':'mǎo','辰':'chén','巳':'sì','午':'wǔ','未':'wèi','申':'shēn','酉':'yǒu','戌':'xū','亥':'hài'};
+var EL_OF={'甲':'wood','乙':'wood','丙':'fire','丁':'fire','戊':'earth','己':'earth','庚':'metal','辛':'metal','壬':'water','癸':'water',
+ '寅':'wood','卯':'wood','巳':'fire','午':'fire','辰':'earth','戌':'earth','丑':'earth','未':'earth','申':'metal','酉':'metal','亥':'water','子':'water'};
+var YANG={'甲':1,'丙':1,'戊':1,'庚':1,'壬':1,'子':1,'寅':1,'辰':1,'午':1,'申':1,'戌':1};
+var EL=[
+ {k:'wood', zh:'木',py:'mù',  en:'Wood', ja:'木（もく）'},
+ {k:'fire', zh:'火',py:'huǒ', en:'Fire', ja:'火（か）'},
+ {k:'earth',zh:'土',py:'tǔ',  en:'Earth',ja:'土（ど）'},
+ {k:'metal',zh:'金',py:'jīn', en:'Metal',ja:'金（ごん）'},
+ {k:'water',zh:'水',py:'shuǐ',en:'Water',ja:'水（すい）'}];
+var ELK={};EL.forEach(function(e){ELK[e.k]=e});
+var ANIMAL={'子':['鼠','shǔ','Rat','ねずみ'],'丑':['牛','niú','Ox','うし'],'寅':['虎','hǔ','Tiger','とら'],'卯':['兔','tù','Rabbit','うさぎ'],'辰':['龍','lóng','Dragon','たつ'],'巳':['蛇','shé','Snake','へび'],
+ '午':['馬','mǎ','Horse','うま'],'未':['羊','yáng','Goat','ひつじ'],'申':['猴','hóu','Monkey','さる'],'酉':['雞','jī','Rooster','とり'],'戌':['狗','gǒu','Dog','いぬ'],'亥':['豬','zhū','Pig','いのしし']};
+/* ten gods: zh, pinyin, en, ja, short meaning zh/en/ja */
+var SS={
+ '比肩':['bǐjiān','Companion','比肩','與日主同五行、同陰陽：自我、朋友、同儕。','Same element and polarity as you: self, friends, peers.','自分と同じ五行・同じ陰陽：自我、友人、仲間。'],
+ '劫財':['jiécái','Rob Wealth','劫財','同五行、陰陽相反：競爭、合作、敢衝。','Same element, opposite polarity: rivalry, teamwork, daring.','同じ五行・陰陽が逆：競争、協力、行動力。'],
+ '食神':['shíshén','Eating God','食神','日主所生、同陰陽：才華、享受、溫和表達。','What you produce, same polarity: talent, enjoyment, gentle expression.','自分が生む・同じ陰陽：才能、楽しみ、穏やかな表現。'],
+ '傷官':['shāngguān','Hurting Officer','傷官','日主所生、陰陽相反：創意、口才、不愛受約束。','What you produce, opposite polarity: creativity, eloquence, independence.','自分が生む・陰陽が逆：創造性、話術、束縛を嫌う。'],
+ '偏財':['piāncái','Indirect Wealth','偏財','日主所剋、同陰陽：機會財、交際、大方。','What you control, same polarity: windfalls, social life, generosity.','自分が剋す・同じ陰陽：臨時収入、社交、気前のよさ。'],
+ '正財':['zhèngcái','Direct Wealth','正財','日主所剋、陰陽相反：穩定收入、務實、責任。','What you control, opposite polarity: steady income, practicality, duty.','自分が剋す・陰陽が逆：安定収入、堅実さ、責任感。'],
+ '七殺':['qīshā','Seven Killings','偏官','剋日主、同陰陽：壓力、魄力、挑戰。','What controls you, same polarity: pressure, boldness, challenge.','自分を剋す・同じ陰陽：プレッシャー、度胸、挑戦。'],
+ '正官':['zhèngguān','Direct Officer','正官','剋日主、陰陽相反：規範、名譽、自律。','What controls you, opposite polarity: rules, reputation, self-discipline.','自分を剋す・陰陽が逆：規律、名誉、自己管理。'],
+ '偏印':['piānyìn','Indirect Resource','偏印','生日主、同陰陽：直覺、獨特想法、偏門學問。','What supports you, same polarity: intuition, unusual ideas, niche learning.','自分を生む・同じ陰陽：直感、独特な発想、専門的な学び。'],
+ '正印':['zhèngyìn','Direct Resource','印綬','生日主、陰陽相反：學習、照顧、貴人。','What supports you, opposite polarity: learning, care, mentors.','自分を生む・陰陽が逆：学び、保護、支えてくれる人。']};
+var DS={'長生':['chángshēng','Birth','長生'],'沐浴':['mùyù','Bath','沐浴'],'冠帶':['guāndài','Cap & Belt','冠帯'],'臨官':['línguān','Coming of Age','建禄'],'帝旺':['dìwàng','Peak','帝旺'],'衰':['shuāi','Decline','衰'],
+ '病':['bìng','Sickness','病'],'死':['sǐ','Death','死'],'墓':['mù','Tomb','墓'],'絕':['jué','Severance','絶'],'胎':['tāi','Conception','胎'],'養':['yǎng','Nurture','養']};
+var DM={
+ '甲':['像大樹：正直、有主見，喜歡往上長，需要空間發展。','Like a tall tree: upright and principled, always growing upwards; you need room to develop.','大樹のように、まっすぐで芯が強く、伸びていく場所を求めるタイプ。'],
+ '乙':['像花草藤蔓：柔軟、細膩、適應力強，懂得借力使力。','Like flowers and vines: supple, perceptive and adaptable; you know how to find support.','草花やつるのように、しなやかで繊細、順応力が高いタイプ。'],
+ '丙':['像太陽：熱情、大方、樂觀，喜歡照亮身邊的人。','Like the sun: warm, generous and optimistic; you brighten everyone around you.','太陽のように、情熱的でおおらか、周りを明るく照らすタイプ。'],
+ '丁':['像燭光：溫暖、細心、有洞察力，安靜卻持久。','Like candlelight: warm, attentive and insightful; quiet but enduring.','ろうそくの灯のように、温かく細やかで、静かに長く輝くタイプ。'],
+ '戊':['像高山：穩重、可靠、包容，讓人有安全感。','Like a mountain: steady, dependable and accepting; people feel safe with you.','山のように、どっしりと頼もしく、包容力があるタイプ。'],
+ '己':['像田園土地：務實、體貼，善於照顧與培育。','Like fertile farmland: practical and caring, good at nurturing others.','田畑の土のように、堅実で思いやりがあり、人を育てるのが得意なタイプ。'],
+ '庚':['像刀劍礦石：果斷、講義氣、行動力強。','Like ore or a blade: decisive, loyal and quick to act.','刀や鉱石のように、決断力があり義理堅く、行動的なタイプ。'],
+ '辛':['像珠寶：精緻、敏銳，重視品味與原則。','Like a jewel: refined and sharp, with high standards and clear principles.','宝石のように、繊細で感性が鋭く、美意識の高いタイプ。'],
+ '壬':['像江河大海：聰明、靈活、心胸開闊、愛自由。','Like a great river or the sea: clever, flexible, open-minded and free-spirited.','大河や海のように、聡明で柔軟、自由を愛するタイプ。'],
+ '癸':['像雨露：溫柔、直覺強，想像力豐富。','Like rain and dew: gentle, intuitive and full of imagination.','雨や露のように、やさしく直感が鋭く、想像力豊かなタイプ。']};
+
+/* places: [id, zh, en, ja, longitude, IANA zone] */
+var PLACES=[
+ ['taipei','台北','Taipei','台北',121.56,'Asia/Taipei'],['newtaipei','新北','New Taipei','新北',121.47,'Asia/Taipei'],['keelung','基隆','Keelung','基隆',121.74,'Asia/Taipei'],
+ ['taoyuan','桃園','Taoyuan','桃園',121.30,'Asia/Taipei'],['hsinchu','新竹','Hsinchu','新竹',120.97,'Asia/Taipei'],['miaoli','苗栗','Miaoli','苗栗',120.82,'Asia/Taipei'],
+ ['taichung','台中','Taichung','台中',120.68,'Asia/Taipei'],['changhua','彰化','Changhua','彰化',120.54,'Asia/Taipei'],['nantou','南投','Nantou','南投',120.69,'Asia/Taipei'],
+ ['yunlin','雲林','Yunlin','雲林',120.53,'Asia/Taipei'],['chiayi','嘉義','Chiayi','嘉義',120.45,'Asia/Taipei'],['tainan','台南','Tainan','台南',120.21,'Asia/Taipei'],
+ ['kaohsiung','高雄','Kaohsiung','高雄',120.31,'Asia/Taipei'],['pingtung','屏東','Pingtung','屏東',120.49,'Asia/Taipei'],['yilan','宜蘭','Yilan','宜蘭',121.75,'Asia/Taipei'],
+ ['hualien','花蓮','Hualien','花蓮',121.60,'Asia/Taipei'],['taitung','台東','Taitung','台東',121.15,'Asia/Taipei'],['penghu','澎湖','Penghu','澎湖',119.58,'Asia/Taipei'],
+ ['kinmen','金門','Kinmen','金門',118.32,'Asia/Taipei'],['matsu','馬祖','Matsu','馬祖',119.95,'Asia/Taipei'],
+ ['hongkong','香港','Hong Kong','香港',114.17,'Asia/Hong_Kong'],['macau','澳門','Macau','マカオ',113.54,'Asia/Macau'],['beijing','北京','Beijing','北京',116.40,'Asia/Shanghai'],
+ ['shanghai','上海','Shanghai','上海',121.47,'Asia/Shanghai'],['guangzhou','廣州','Guangzhou','広州',113.26,'Asia/Shanghai'],['singapore','新加坡','Singapore','シンガポール',103.82,'Asia/Singapore'],
+ ['kl','吉隆坡','Kuala Lumpur','クアラルンプール',101.69,'Asia/Kuala_Lumpur'],['bangkok','曼谷','Bangkok','バンコク',100.50,'Asia/Bangkok'],['tokyo','東京','Tokyo','東京',139.69,'Asia/Tokyo'],
+ ['osaka','大阪','Osaka','大阪',135.50,'Asia/Tokyo'],['seoul','首爾','Seoul','ソウル',126.98,'Asia/Seoul'],['sydney','雪梨','Sydney','シドニー',151.21,'Australia/Sydney'],
+ ['melbourne','墨爾本','Melbourne','メルボルン',144.96,'Australia/Melbourne'],['auckland','奧克蘭','Auckland','オークランド',174.76,'Pacific/Auckland'],
+ ['london','倫敦','London','ロンドン',-0.13,'Europe/London'],['paris','巴黎','Paris','パリ',2.35,'Europe/Paris'],['berlin','柏林','Berlin','ベルリン',13.40,'Europe/Berlin'],
+ ['newyork','紐約','New York','ニューヨーク',-74.01,'America/New_York'],['toronto','多倫多','Toronto','トロント',-79.38,'America/Toronto'],
+ ['vancouver','溫哥華','Vancouver','バンクーバー',-123.12,'America/Vancouver'],['la','洛杉磯','Los Angeles','ロサンゼルス',-118.24,'America/Los_Angeles'],
+ ['sf','舊金山','San Francisco','サンフランシスコ',-122.42,'America/Los_Angeles']];
+var PL={};PLACES.forEach(function(p){PL[p[0]]=p});
+
+/* ---------- UI strings ---------- */
+var T={
+zh:{eyebrow:'八字學中文 · BaZi & Chinese · <span lang="ja">日本語</span>',title:'八字排盤',slogan:'八個字，說一個你的故事。',
+ sub:'輸入出生日期和時間，排出四柱八字：十神、藏干、五行、大運流年，每個字都附拼音。',
+ name:'名字（可不填）',gender:'性別（決定大運順逆）',male:'男 <small>乾造</small>',female:'女 <small>坤造</small>',date:'出生日期（國曆）',time:'出生時間',place:'出生地點',
+ noTime:'不知道出生時間',noTimeS:'只排年、月、日三柱；大運起運時間會有誤差。',
+ solar:'用真太陽時校正',solarS:'依出生地經度與均時差調整時間，時辰交界附近才會有差別。',
+ zi:'23:00 起算隔天（子時換日）',ziS:'關掉＝早晚子時：23:00–24:00 日柱仍算當天。',
+ go:'排盤',saved:'已存的命盤',noSaved:'還沒有存命盤。',errDate:'請輸入正確的出生日期（1901–2099）。',
+ disclaimer:'僅供娛樂與學習中文參考，不構成任何建議。資料只存在你的裝置。',
+ qian:'乾造',kun:'坤造',lunar:'農曆',zodiac:'生肖',adjSolar:'真太陽時',adjDst:'已扣除夏令時間 1 小時',
+ rowSS:'十神',rowGan:'天干',rowZhi:'地支',rowHide:'藏干',rowNy:'納音',rowDs:'星運',rowKong:'空亡',
+ year:'年柱',month:'月柱',day:'日柱',hour:'時柱',dm:'日主',
+ secPillars:'四柱八字',secWx:'五行',wxHint:'數天干地支共 {n} 個字的五行（不含藏干）。',lack:'缺',lackTxt:'命盤中沒有出現的五行：',noLack:'五行齊全。',
+ secDm:'日主',dmIs:'你的日主是',secYun:'大運',yunStart:'出生後 {y} 年 {m} 個月 {d} 天起運（約 {date}）',forward:'順行',backward:'逆行',
+ pre:'起運前',ageUnit:'歲',liunian:'流年',now:'今年',xu:'年齡為虛歲',
+ secMore:'其他',taiyuan:'胎元',minggong:'命宮',shengong:'身宮',jieqi:'出生節氣',prevJie:'{a} 之後',
+ gloss:'十神小辭典',copy:'複製結果',link:'複製連結',save:'存命盤',copied:'已複製',savedOk:'已存',again:'重新排盤',
+ unknownT:'時辰不詳'},
+en:{eyebrow:'BaZi & Chinese · 八字學中文 · <span lang="ja">日本語</span>',title:'BaZi Chart 八字排盤',slogan:'八個字，說一個你的故事。<span class="sl-py">bā gè zì, shuō yí gè nǐ de gùshi</span>',
+ sub:'Enter your birth date and time to see your Four Pillars: Ten Gods, hidden stems, five elements and luck pillars — every character with pinyin.',
+ name:'Name (optional)',gender:'Sex (sets the direction of the luck pillars)',male:'Male <small>乾造</small>',female:'Female <small>坤造</small>',date:'Date of birth (Gregorian)',time:'Time of birth',place:'Place of birth',
+ noTime:'I don’t know my birth time',noTimeS:'Shows the year, month and day pillars only; the luck-pillar start date will be approximate.',
+ solar:'Use true solar time',solarS:'Adjusts for the longitude of your birthplace and the equation of time; it only matters near the boundary of a two-hour period.',
+ zi:'Day changes at 23:00 (Zi hour)',ziS:'Off = early/late Zi hour: 23:00–24:00 still counts as the same day.',
+ go:'Show my chart',saved:'Saved charts',noSaved:'No saved charts yet.',errDate:'Please enter a valid date of birth (1901–2099).',
+ disclaimer:'For entertainment and learning Chinese only; not advice of any kind. Your data stays on your device.',
+ qian:'Male chart 乾造',kun:'Female chart 坤造',lunar:'Lunar date',zodiac:'Zodiac',adjSolar:'True solar time',adjDst:'1 hour of summer time removed',
+ rowSS:'Ten God',rowGan:'Stem',rowZhi:'Branch',rowHide:'Hidden',rowNy:'Nayin',rowDs:'Life stage',rowKong:'Void',
+ year:'Year',month:'Month',day:'Day',hour:'Hour',dm:'Day Master',
+ secPillars:'Four Pillars',secWx:'Five Elements',wxHint:'Elements of the {n} visible characters (hidden stems not counted).',lack:'missing',lackTxt:'Elements that do not appear in your chart: ',noLack:'All five elements are present.',
+ secDm:'Day Master',dmIs:'Your Day Master is',secYun:'Luck Pillars',yunStart:'Luck pillars begin {y} yr {m} mo {d} days after birth (around {date})',forward:'forward',backward:'backward',
+ pre:'Before',ageUnit:'',liunian:'Annual pillars',now:'this year',xu:'Ages are counted the traditional way (1 at birth).',
+ secMore:'More',taiyuan:'Conception pillar',minggong:'Life palace',shengong:'Body palace',jieqi:'Solar term',prevJie:'after {a}',
+ gloss:'Ten Gods glossary',copy:'Copy result',link:'Copy link',save:'Save chart',copied:'Copied',savedOk:'Saved',again:'New chart',
+ unknownT:'unknown hour'},
+ja:{eyebrow:'八字学中文 · BaZi &amp; Chinese · 日本語',title:'四柱推命 八字排盤',slogan:'八つの文字が、あなたの物語を語る。',
+ sub:'生年月日と生まれた時刻を入れると、四柱（十神・蔵干・五行・大運・流年）を表示します。すべての漢字にピンイン付き。',
+ name:'名前（任意）',gender:'性別（大運の順行・逆行が決まります）',male:'男性 <small>乾造</small>',female:'女性 <small>坤造</small>',date:'生年月日（西暦）',time:'生まれた時刻',place:'出生地',
+ noTime:'生まれた時刻がわからない',noTimeS:'年・月・日の三柱のみ表示。大運の開始時期は目安になります。',
+ solar:'真太陽時で補正する',solarS:'出生地の経度と均時差で時刻を調整します。時辰の境目付近でのみ差が出ます。',
+ zi:'23:00 から翌日とする（子の刻で日替わり）',ziS:'オフ＝早子・夜子：23:00〜24:00 は当日の日柱のまま。',
+ go:'命式を出す',saved:'保存した命式',noSaved:'保存した命式はまだありません。',errDate:'正しい生年月日（1901〜2099年）を入力してください。',
+ disclaimer:'娯楽と中国語学習のための参考です。いかなる助言でもありません。データはお使いの端末にのみ保存されます。',
+ qian:'男命 乾造',kun:'女命 坤造',lunar:'旧暦',zodiac:'干支',adjSolar:'真太陽時',adjDst:'サマータイム 1 時間を差し引き済み',
+ rowSS:'通変星',rowGan:'天干',rowZhi:'地支',rowHide:'蔵干',rowNy:'納音',rowDs:'十二運',rowKong:'空亡',
+ year:'年柱',month:'月柱',day:'日柱',hour:'時柱',dm:'日主',
+ secPillars:'四柱',secWx:'五行',wxHint:'天干・地支 {n} 文字の五行（蔵干は含みません）。',lack:'なし',lackTxt:'命式に出ていない五行：',noLack:'五行がすべてそろっています。',
+ secDm:'日主',dmIs:'あなたの日主は',secYun:'大運',yunStart:'生後 {y} 年 {m} か月 {d} 日で立運（{date} ごろ）',forward:'順行',backward:'逆行',
+ pre:'立運前',ageUnit:'歳',liunian:'流年',now:'今年',xu:'年齢は数え年です。',
+ secMore:'その他',taiyuan:'胎元',minggong:'命宮',shengong:'身宮',jieqi:'生まれた節気',prevJie:'{a} の後',
+ gloss:'通変星ミニ辞典',copy:'結果をコピー',link:'リンクをコピー',save:'命式を保存',copied:'コピーしました',savedOk:'保存しました',again:'もう一度',
+ unknownT:'時刻不明'}};
+var JQ_JA={'立春':'立春','驚蟄':'啓蟄','清明':'清明','立夏':'立夏','芒種':'芒種','小暑':'小暑','立秋':'立秋','白露':'白露','寒露':'寒露','立冬':'立冬','大雪':'大雪','小寒':'小寒'};
+var JQ_EN={'立春':'Start of Spring','驚蟄':'Awakening of Insects','清明':'Clear and Bright','立夏':'Start of Summer','芒種':'Grain in Ear','小暑':'Minor Heat','立秋':'Start of Autumn','白露':'White Dew','寒露':'Cold Dew','立冬':'Start of Winter','大雪':'Major Snow','小寒':'Minor Cold'};
+
+var lang='zh';
+function t(k,o){var s=(T[lang]&&T[lang][k]!=null)?T[lang][k]:T.zh[k];if(o)for(var x in o)s=s.split('{'+x+'}').join(o[x]);return s}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+function applyLang(){
+  document.documentElement.lang=lang==='zh'?'zh-Hant':lang==='ja'?'ja':'en-GB';
+  document.querySelectorAll('[data-i]').forEach(function(el){el.innerHTML=t(el.getAttribute('data-i'))});
+  document.querySelectorAll('.langsw button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.lang===lang?'true':'false')});
+  var sel=$('#pl'),cur=sel.value||store('bazi-place')||'taipei';
+  sel.innerHTML=PLACES.map(function(p){var n=lang==='en'?p[2]:lang==='ja'?p[3]:p[1];return '<option value="'+p[0]+'">'+esc(n)+(lang!=='zh'&&lang!=='ja'?'':' · '+esc(p[2]))+'</option>'}).join('');
+  sel.value=PL[cur]?cur:'taipei';
+  renderHist(); if(last) render(last);
+}
+
+/* ---------- time handling ---------- */
+function zoneOffsetMin(tz,utcMs){ // offset of zone at an instant, minutes
+  var f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var p={};f.formatToParts(new Date(utcMs)).forEach(function(x){p[x.type]=x.value});
+  var asUtc=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour%24,+p.minute,+p.second);
+  return Math.round((asUtc-utcMs)/60000);
+}
+function wallToUtc(tz,y,m,d,h,mi){ // wall clock in zone → UTC ms
+  var guess=Date.UTC(y,m-1,d,h,mi);var off=zoneOffsetMin(tz,guess);var u=guess-off*60000;
+  var off2=zoneOffsetMin(tz,u);if(off2!==off)u=guess-off2*60000;return u;
+}
+function stdOffsetMin(tz,y){var a=zoneOffsetMin(tz,Date.UTC(y,0,15,12)),b=zoneOffsetMin(tz,Date.UTC(y,6,15,12));return Math.min(a,b)}
+function eotMin(utcMs){var d=new Date(utcMs);var start=Date.UTC(d.getUTCFullYear(),0,0);var N=Math.floor((utcMs-start)/864e5);var B=2*Math.PI*(N-81)/364;return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B)}
+function partsUTC(ms){var d=new Date(ms);return [d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate(),d.getUTCHours(),d.getUTCMinutes()]}
+function pad(n){return (n<10?'0':'')+n}
+function fmtYmdHm(a,noT){return a[0]+'-'+pad(a[1])+'-'+pad(a[2])+(noT?'':' '+pad(a[3])+':'+pad(a[4]))}
+
+/* ---------- chart computation ---------- */
+function compute(inp){
+  var dp=inp.d.split('-').map(Number),tp=(inp.t||'12:00').split(':').map(Number);
+  if(inp.nt)tp=[12,0];
+  var place=PL[inp.p]||PL.taipei,tz=place[5];
+  var utc=wallToUtc(tz,dp[0],dp[1],dp[2],tp[0],tp[1]);
+  var off=zoneOffsetMin(tz,utc),std=stdOffsetMin(tz,dp[0]),dst=off-std;
+  var used, solarAdj=null;
+  if(inp.s&&!inp.nt){var lmt=utc+place[4]*4*60000+eotMin(utc)*60000;used=partsUTC(lmt);solarAdj=Math.round((lmt-(utc+std*60000))/60000)}
+  else used=partsUTC(utc+std*60000);
+  var solar=Solar.fromYmdHms(used[0],used[1],used[2],used[3],used[4],0);
+  var lunar=solar.getLunar(),ec=lunar.getEightChar();ec.setSect(inp.z?1:2);
+  var dayGan=ec.getDayGan();
+  function pillar(kind){
+    var P={year:'Year',month:'Month',day:'Day',hour:'Time'}[kind];
+    var gan=ec['get'+P+'Gan'](),zhi=ec['get'+P+'Zhi']();
+    var hide=ec['get'+P+'HideGan'](),hss=ec['get'+P+'ShiShenZhi']();
+    return {kind:kind,gan:gan,zhi:zhi,ss:kind==='day'?null:tr(ec['get'+P+'ShiShenGan']()),
+      hide:hide.map(function(g,i){return [g,tr(hss[i])]}),ny:tr(ec['get'+P+'NaYin']()),ds:tr(ec['get'+P+'DiShi']()),
+      kong:tr(ec['get'+P+'XunKong']())};
+  }
+  var ps=[pillar('year'),pillar('month'),pillar('day')];
+  if(!inp.nt)ps.push(pillar('hour'));
+  var cnt={wood:0,fire:0,earth:0,metal:0,water:0};
+  ps.forEach(function(p){cnt[EL_OF[p.gan]]++;cnt[EL_OF[p.zhi]]++});
+  var yun=ec.getYun(inp.g===1?1:0);
+  var dys=yun.getDaYun(10).map(function(d){var gz=d.getGanZhi();
+    return {i:d.getIndex(),sy:d.getStartYear(),ey:d.getEndYear(),sa:d.getStartAge(),ea:d.getEndAge(),gz:gz,
+      ln:d.getLiuNian().map(function(n){return [n.getYear(),n.getAge(),n.getGanZhi()]})}});
+  var pj=lunar.getPrevJie(true),nj=lunar.getNextJie(true);
+  var forward=(YANG[ec.getYearGan()]?1:0)===(inp.g===1?1:0);
+  return {inp:inp,used:used,solarAdj:solarAdj,dst:dst,place:place,
+    lunarTxt:tr(lunar.getYearInGanZhiByLiChun? lunar.getYearInGanZhi():'')+'年 '+tr(lunar.getMonthInChinese())+'月'+tr(lunar.getDayInChinese()),
+    ps:ps,dayGan:dayGan,cnt:cnt,dys:dys,forward:forward,
+    start:{y:yun.getStartYear(),m:yun.getStartMonth(),d:yun.getStartDay(),date:yun.getStartSolar().toYmd()},
+    ty:[ec.getTaiYuan(),tr(ec.getTaiYuanNaYin())],mg:[ec.getMingGong(),tr(ec.getMingGongNaYin())],sg:[ec.getShenGong(),tr(ec.getShenGongNaYin())],
+    jie:[tr(pj.getName()),pj.getSolar().toYmdHms().slice(0,16),tr(nj.getName()),nj.getSolar().toYmdHms().slice(0,16)],
+    yearZhi:ec.getYearZhi(),bazi:ps.map(function(p){return p.gan+p.zhi}).join(' ')};
+}
+function ssOf(dayGan,g){return tr(LunarUtil.SHI_SHEN[dayGan+g])}
+function ssZhi(dayGan,z){return ssOf(dayGan,LunarUtil.ZHI_HIDE_GAN[z][0])}
+
+/* ---------- rendering ---------- */
+function ssLabel(s){if(!s)return '';var d=SS[s];if(!d)return esc(s);
+  if(lang==='en')return esc(s)+'<small>'+d[1]+'</small>';
+  if(lang==='ja')return '<span lang="ja">'+esc(d[2])+'</span><small>'+d[0]+'</small>';
+  return esc(s)+'<small>'+d[0]+'</small>'}
+function elName(k){var e=ELK[k];return lang==='en'?e.en:lang==='ja'?e.zh:e.zh}
+function tile(ch,me){var k=EL_OF[ch];return '<div class="tile'+(me?' me':'')+'"><div class="tile-in"><span class="ch e-'+k+'">'+ch+'</span><span class="py">'+PY[ch]+'</span><span class="el e-'+k+'">'+(YANG[ch]?(lang==='en'?'Yang ':'陽'):(lang==='en'?'Yin ':'陰'))+elName(k)+'</span></div></div>'}
+function dsLabel(s){var d=DS[s];if(!d)return esc(s);return (lang==='ja'?'<span lang="ja">'+d[2]+'</span>':esc(s))+'<small>'+(lang==='en'?d[1]:d[0])+'</small>'}
+
+var last=null, selDy=null;
+function render(R){
+  last=R;var out=$('#out'),inp=R.inp,nowY=new Date().getFullYear();
+  var an=ANIMAL[R.yearZhi];
+  var name=inp.n?esc(inp.n)+' · ':'';
+  var head='<div class="r-head"><h2>'+name+(inp.g===1?t('qian'):t('kun'))+'</h2>'+
+    '<p>'+esc(inp.d)+(inp.nt?' · '+t('unknownT'):' '+esc(inp.t))+' · '+esc(lang==='en'?R.place[2]:lang==='ja'?R.place[3]:R.place[1])+'</p>'+
+    '<p>'+t('lunar')+' '+esc(R.lunarTxt)+' · '+t('zodiac')+' '+an[0]+' '+an[1]+(lang==='en'?' ('+an[2]+')':lang==='ja'?'（'+an[3]+'）':'')+'</p>'+
+    (R.solarAdj!==null?'<p class="adj">'+t('adjSolar')+' '+fmtYmdHm(R.used)+'（'+(R.solarAdj>=0?'+':'')+R.solarAdj+' min）</p>':'')+
+    (R.dst>0?'<p class="adj">'+t('adjDst')+'</p>':'')+'</div>';
+
+  // pillars table
+  var cols=[R.ps[0],R.ps[1],R.ps[2],R.ps[3]||null];
+  var g='<div class="pillars"><div></div>';
+  cols.forEach(function(p,i){var k=['year','month','day','hour'][i];g+='<div class="ph'+(i===2?' me':'')+'">'+t(k)+'<small>'+['nián zhù','yuè zhù','rì zhù','shí zhù'][i]+'</small></div>'});
+  g+='<div class="rl">'+t('rowSS')+'</div>';
+  cols.forEach(function(p,i){g+=i===2?'<div class="ss me">'+t('dm')+'<small>rìzhǔ</small></div>':'<div class="ss">'+(p?ssLabel(p.ss):'')+'</div>'});
+  g+='<div class="rl">'+t('rowGan')+'<small>tiāngān</small></div>';
+  cols.forEach(function(p,i){g+=p?tile(p.gan,i===2):'<div class="tile blank"><div class="tile-in">?</div></div>'});
+  g+='<div class="rl">'+t('rowZhi')+'<small>dìzhī</small></div>';
+  cols.forEach(function(p){g+=p?tile(p.zhi):'<div class="tile blank"><div class="tile-in">?</div></div>'});
+  g+='<div class="rl">'+t('rowHide')+'</div>';
+  cols.forEach(function(p){g+='<div class="hide">'+(p?p.hide.map(function(h){var d=SS[h[1]];return '<span><b class="e-'+EL_OF[h[0]]+'">'+h[0]+'</b>'+(lang==='ja'&&d?'<span lang="ja">'+d[2]+'</span>':esc(h[1]))+'</span>'}).join(''):'')+'</div>'});
+  g+='<div class="rl">'+t('rowDs')+'</div>';
+  cols.forEach(function(p){g+='<div class="cell">'+(p?dsLabel(p.ds):'')+'</div>'});
+  g+='<div class="rl">'+t('rowNy')+'<small>nàyīn</small></div>';
+  cols.forEach(function(p){g+='<div class="cell">'+(p?esc(p.ny):'')+'</div>'});
+  g+='<div class="rl">'+t('rowKong')+'</div>';
+  cols.forEach(function(p){g+='<div class="cell">'+(p?esc(p.kong):'')+'</div>'});
+  g+='</div>';
+  var secP='<div class="sec" style="border-top:0;padding-top:0"><h3>'+t('secPillars')+'<small>sìzhù bāzì</small></h3>'+g+'</div>';
+
+  // five elements
+  var n=R.ps.length*2,max=Math.max.apply(null,EL.map(function(e){return R.cnt[e.k]}));
+  var wx='<div class="wx">'+EL.map(function(e){var c=R.cnt[e.k];
+    return '<div class="wx-row e-'+e.k+'"><span class="wx-name"><b>'+e.zh+'</b><small>'+e.py+(lang==='en'?' · '+e.en:'')+'</small></span><span class="bar"><i style="width:'+(c/Math.max(max,1)*100)+'%"></i></span><span class="wx-n">'+c+'</span></div>'}).join('')+'</div>';
+  var lack=EL.filter(function(e){return !R.cnt[e.k]});
+  var lackTxt=lack.length?t('lackTxt')+lack.map(function(e){return e.zh+' '+e.py+(lang==='en'?' ('+e.en+')':'')}).join('、'):t('noLack');
+  var secW='<div class="sec"><h3>'+t('secWx')+'<small>wǔxíng</small></h3><p class="hint">'+t('wxHint',{n:n})+'</p>'+wx+'<p class="note-box">'+lackTxt+'</p></div>';
+
+  // day master
+  var dg=R.dayGan,dmTxt=DM[dg],ek=EL_OF[dg];
+  var dmMain=lang==='en'?dmTxt[1]:lang==='ja'?dmTxt[2]:dmTxt[0];
+  var dmSub=lang==='zh'?dmTxt[1]:dmTxt[0];
+  var secD='<div class="sec"><h3>'+t('secDm')+'<small>rìzhǔ</small></h3><div class="dm">'+tile(dg,true)+'<div class="dm-text"><h4>'+t('dmIs')+' <span class="e-'+ek+'">'+dg+' '+PY[dg]+'</span>'+(lang==='en'?' — '+(YANG[dg]?'Yang ':'Yin ')+ELK[ek].en:' · '+(YANG[dg]?'陽':'陰')+ELK[ek].zh)+'</h4><p'+(lang==='ja'?' lang="ja"':'')+'>'+esc(dmMain)+'</p><p class="tr"'+(lang==='zh'?' lang="en"':'')+'>'+esc(dmSub)+'</p></div></div></div>';
+
+  // luck pillars
+  if(selDy===null||!R.dys[selDy]){selDy=1;R.dys.forEach(function(d,i){if(nowY>=d.sy&&nowY<=d.ey)selDy=i})}
+  var dyH='<div class="dayun" role="group">'+R.dys.map(function(d,i){var cur=nowY>=d.sy&&nowY<=d.ey;
+    var gzh=d.gz?'<span class="gz">'+d.gz.split('').map(function(c){return '<span class="e-'+EL_OF[c]+'">'+c+'</span>'}).join('')+'</span><span class="sg">'+ssOf(R.dayGan,d.gz[0])+'·'+ssZhi(R.dayGan,d.gz[1])+'</span>':'<span class="gz pre">'+t('pre')+'</span>';
+    return '<button type="button" class="dy'+(cur?' now':'')+'" data-k="'+i+'" aria-pressed="'+(i===selDy)+'"><span class="age">'+d.sa+(d.ea!==d.sa?'–'+d.ea:'')+t('ageUnit')+'</span>'+gzh+'<span class="yr">'+d.sy+'</span></button>'}).join('')+'</div>';
+  var D=R.dys[selDy];
+  var lnH='<p class="label">'+t('liunian')+' · '+D.sy+'–'+D.ey+'</p><div class="ln">'+D.ln.map(function(l){var cur=l[0]===nowY;
+    return '<div'+(cur?' class="now"':'')+'><b>'+l[2].split('').map(function(c){return '<span class="e-'+EL_OF[c]+'">'+c+'</span>'}).join('')+'</b><small>'+l[0]+' · '+l[1]+t('ageUnit')+'</small>'+(cur?'<span class="tag-now">'+t('now')+'</span>':'')+'</div>'}).join('')+'</div>';
+  var secY='<div class="sec"><h3>'+t('secYun')+'<small>dàyùn · '+(R.forward?t('forward'):t('backward'))+'</small></h3><p class="yun-meta">'+t('yunStart',R.start)+'</p>'+dyH+lnH+'<p class="hint">'+t('xu')+'</p></div>';
+
+  // extras
+  var jn=function(s){return lang==='en'?(JQ_EN[s]||s)+' '+s:lang==='ja'?(JQ_JA[s]||s):s};
+  var kv=[[t('taiyuan'),R.ty],[t('minggong'),R.mg],[t('shengong'),R.sg]];
+  var secM='<div class="sec"><h3>'+t('secMore')+'</h3><div class="kv">'+kv.map(function(x){return '<div><span>'+x[0]+'</span><b>'+x[1][0]+'</b><small>'+esc(x[1][1])+'</small></div>'}).join('')+
+    '<div><span>'+t('jieqi')+'</span><b>'+esc(jn(R.jie[0]))+'</b><small>'+R.jie[1]+' → '+esc(jn(R.jie[2]))+' '+R.jie[3]+'</small></div></div>'+
+    '<details><summary>'+t('gloss')+'</summary><ul class="gl">'+Object.keys(SS).map(function(k){var d=SS[k];
+      var main=lang==='en'?d[4]:lang==='ja'?d[5]:d[3];
+      return '<li><b>'+k+'</b><span class="py">'+d[0]+'</span>'+(lang==='en'?d[1]:lang==='ja'?'<span lang="ja">'+d[2]+'</span>':d[1])+'<small'+(lang==='ja'?' lang="ja"':'')+'>'+esc(main)+'</small></li>'}).join('')+'</ul></details></div>';
+
+  var foot='<div class="r-foot"><button class="btn ghost" type="button" id="bCopy">'+t('copy')+'</button><button class="btn ghost" type="button" id="bLink">'+t('link')+'</button><button class="btn ghost" type="button" id="bSave">'+t('save')+'</button><button class="btn ghost" type="button" id="bAgain">'+t('again')+'</button></div>';
+  out.innerHTML=head+secP+secW+secD+secY+secM+foot;
+  out.hidden=false;
+  var act=out.querySelector('.dy[aria-pressed="true"]');if(act){var box=out.querySelector('.dayun');box.scrollLeft=Math.max(0,act.offsetLeft-box.offsetLeft-12)}
+}
+
+/* ---------- actions ---------- */
+function readForm(){return {n:$('#nm').value.trim(),g:$('#gF').checked?0:1,d:$('#bd').value,t:$('#bt').value||'12:00',p:$('#pl').value,nt:$('#noTime').checked?1:0,s:$('#solar').checked?1:0,z:$('#zi').checked?1:0}}
+function fillForm(i){$('#nm').value=i.n||'';(i.g===0?$('#gF'):$('#gM')).checked=true;$('#bd').value=i.d;$('#bt').value=i.t||'12:00';$('#pl').value=PL[i.p]?i.p:'taipei';$('#noTime').checked=!!i.nt;$('#solar').checked=!!i.s;$('#zi').checked=i.z!==0;syncSw()}
+function syncSw(){var nt=$('#noTime').checked;$('#bt').disabled=nt;$('#solar').disabled=nt}
+function valid(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;var y=+d.slice(0,4);return y>=1901&&y<=2099}
+function run(inp,scroll){
+  if(!valid(inp.d)){var e=$('#err');e.textContent=t('errDate');e.hidden=false;return}
+  $('#err').hidden=true;store('bazi-place',inp.p);selDy=null;
+  render(compute(inp));
+  if(scroll)$('#out').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toast(s){var el=$('#toast');el.textContent=s;el.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove('on')},1600)}
+function copyText(s){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).then(function(){toast(t('copied'))},function(){fallback(s)})}else fallback(s)}
+function fallback(s){var ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(t('copied'))}catch(e){}ta.remove()}
+function shareUrl(i){var q=new URLSearchParams({d:i.d,g:i.g?'m':'f',p:i.p,lang:lang});if(!i.nt)q.set('t',i.t);else q.set('nt','1');if(i.s)q.set('s','1');if(!i.z)q.set('z','0');if(i.n)q.set('n',i.n);
+  return location.origin+location.pathname+'?'+q.toString()}
+function resultText(R){var lines=[(R.inp.n?R.inp.n+' ':'')+(R.inp.g===1?'乾造':'坤造')+'｜'+R.inp.d+(R.inp.nt?'':' '+R.inp.t)+'｜'+R.place[1],
+  '八字：'+R.bazi+(R.inp.nt?'（時辰不詳）':''),
+  '日主：'+R.dayGan+'（'+(YANG[R.dayGan]?'陽':'陰')+ELK[EL_OF[R.dayGan]].zh+'）',
+  '五行：'+EL.map(function(e){return e.zh+R.cnt[e.k]}).join(' '),
+  '大運：'+R.dys.filter(function(d){return d.gz}).map(function(d){return d.sa+'歲'+d.gz}).join(' '),
+  shareUrl(R.inp)];return lines.join('\n')}
+function getSaved(){try{return JSON.parse(store('bazi-saved')||'[]')}catch(e){return []}}
+function renderHist(){var L=getSaved(),ol=$('#hist');$('#histEmpty').hidden=L.length>0;
+  ol.innerHTML=L.map(function(s,i){return '<li><button type="button" class="open" data-k="'+i+'"><b>'+esc(s.inp.n||(s.inp.g===1?'乾造':'坤造'))+'</b><span class="gz">'+esc(s.bazi)+'</span><small>'+esc(s.inp.d)+(s.inp.nt?'':' '+esc(s.inp.t))+'</small></button><button type="button" class="del" data-d="'+i+'" aria-label="delete">×</button></li>'}).join('')}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.lang){lang=b.dataset.lang;store('bazi-lang',lang);applyLang();return}
+  if(b.classList.contains('dy')){selDy=+b.dataset.k;var y=window.scrollY;render(last);window.scrollTo(0,y);return}
+  if(b.id==='bCopy'){copyText(resultText(last));return}
+  if(b.id==='bLink'){copyText(shareUrl(last.inp));return}
+  if(b.id==='bSave'){var L=getSaved().filter(function(s){return JSON.stringify(s.inp)!==JSON.stringify(last.inp)});L.unshift({inp:last.inp,bazi:last.bazi});store('bazi-saved',JSON.stringify(L.slice(0,12)));renderHist();toast(t('savedOk'));return}
+  if(b.id==='bAgain'){$('#form').scrollIntoView({behavior:'smooth'});return}
+  if(b.classList.contains('open')){var s=getSaved()[+b.dataset.k];if(s){fillForm(s.inp);run(s.inp,true)}return}
+  if(b.dataset.d!=null){var L2=getSaved();L2.splice(+b.dataset.d,1);store('bazi-saved',JSON.stringify(L2));renderHist();return}
+});
+$('#form').addEventListener('submit',function(e){e.preventDefault();run(readForm(),true)});
+$('#noTime').addEventListener('change',syncSw);
+
+/* ---------- start ---------- */
+var q=new URLSearchParams(location.search);
+var ql=q.get('lang'),saved=store('bazi-lang')||store('tarot-lang');
+if(/^(zh|en|ja)$/.test(ql||'')){lang=ql;store('bazi-lang',lang)}
+else if(/^(zh|en|ja)$/.test(saved||''))lang=saved;
+else{var nl=(navigator.language||'zh').toLowerCase();lang=nl.indexOf('ja')===0?'ja':nl.indexOf('zh')===0?'zh':'en'}
+applyLang();
+if(q.get('d')){var i0={n:q.get('n')||'',g:q.get('g')==='f'?0:1,d:q.get('d'),t:q.get('t')||'12:00',p:q.get('p')||'taipei',nt:q.get('nt')==='1'?1:0,s:q.get('s')==='1'?1:0,z:q.get('z')==='0'?0:1};fillForm(i0);run(i0,false)}
+syncSw();
+})();
+</script>
+
+<!-- Cloudflare Web Analytics (skip on devices opened once with ?notrack=1; undo with ?notrack=0) -->
+<script>(function(){try{var q=location.search;if(/[?&]notrack=1/.test(q))localStorage.setItem('cw-notrack','1');if(/[?&]notrack=0/.test(q))localStorage.removeItem('cw-notrack');if(localStorage.getItem('cw-notrack')==='1'){console.log('analytics off on this device');return}}catch(e){}if(location.hostname.indexOf('github.io')<0)return;var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon','{"token": "a9294b7012bb4e4bbf4b67f23979b202"}');document.body.appendChild(s)})();</script>
+<!-- End Cloudflare Web Analytics -->
+<!-- Auto-update: GitHub Pages lets browsers cache pages ~10 min; check for a newer build and refresh once -->
+<script>(function(){var B='BUILD:20261027202543';try{if(location.protocol.indexOf('http')!==0)return;
+fetch(location.href,{cache:'reload'}).then(function(r){return r.text()}).then(function(t){var m=t.match(/BUILD:20261027202543(\d+)/);
+if(m&&('BUILD:20261027202543'+m[1])!==B){var k='autoupd-'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.reload()}}).catch(function(){})}catch(e){}})();</script>
+</body>
+</html>
